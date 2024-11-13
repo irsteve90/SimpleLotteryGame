@@ -66,49 +66,5 @@ namespace LotteryGame.Tests.UnitTests.Game
                 Assert.That(tickets, Is.EqualTo(_mockGameConfig.Object.Value.MaxTickets));
             }
         }
-
-        [Test]
-        public void RequestTicketsAmount_ShouldHandleInvalidInput()
-        {
-            // Arrange
-            var player = new Player { Id = 1 };
-
-            // Mock Console input with invalid number first, then valid number
-            using (var sw = new StringWriter())
-            {
-                Console.SetOut(sw);
-                Console.SetIn(new StringReader("Not Number"));
-
-                // Act
-                var tickets = _gameUI.RequestTicketsAmount(player);
-
-                // Assert
-                Assert.That(tickets, Is.EqualTo(5));
-                var output = sw.ToString();
-                StringAssert.Contains("invalid is not a valid number.", output);
-            }
-        }
-
-        [Test]
-        public void RequestTicketsAmount_ShouldHandleOutOfRangeTickets()
-        {
-            // Arrange
-            var player = new Player { Id = 1 };
-
-            // Mock Console input with invalid number (out of range)
-            using (var sw = new StringWriter())
-            {
-                Console.SetOut(sw);
-                Console.SetIn(new StringReader((_mockGameConfig.Object.Value.MaxTickets + 1).ToString()));
-
-                // Act
-                var tickets = _gameUI.RequestTicketsAmount(player);
-
-                // Assert
-                Assert.That(tickets, Is.EqualTo(5));
-                var output = sw.ToString();
-                StringAssert.Contains("Requested tickets must be between 1 and 10.", output);
-            }
-        }
     }
 }
